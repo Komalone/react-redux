@@ -10,7 +10,7 @@
 </head>
 <body>
  
-    <form onsubmit="saveToLocalStorage(event)">
+    <form onsubmit="saveToLocalStorage(e)">
         <div class="container">
         <label>Choose ExpenseAmount</label>
         <input type="text" id="amount" name="amount" required/>
@@ -18,8 +18,11 @@
         <input type="text" id="task" name="task" required/>
         <label>Choose Category</label>
         <input type="text" id="plan" name="plan" required/>
-        <button>Add Expense</button>
+        <input type="submit" id="submit" value="Submit"/>
     </form>
+    <ul id="items" class="items">
+
+    </ul>
     <script src="expense.js">
     </script>
 </body>
