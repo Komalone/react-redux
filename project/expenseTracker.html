@@ -9,21 +9,112 @@
     
 </head>
 <body>
+    <div>
+        <h3>EXPENSE TRACKER APP</h3>
+    </div>
  
-    <form onsubmit="saveToLocalStorage(e)">
+    <form onsubmit="expenses(event)">
         <div class="container">
-        <label>Choose ExpenseAmount</label>
-        <input type="text" id="amount" name="amount" required/>
-        <label>Choose descripton</label>
-        <input type="text" id="task" name="task" required/>
-        <label>Choose Category</label>
-        <input type="text" id="plan" name="plan" required/>
-        <input type="submit" id="submit" value="Submit"/>
+        <label><b>Choose ExpenseAmount</b></label>
+        <input type="number" id="amount" name="amount" required/><br>
+        <label><b>Choose descripton</b></label>
+        <input type="text" id="task" name="task" required/><br>
+        <label><b>Choose Category</b></label>
+        <input type="text" id="plan" name="plan" required/><br>
+        <button>Add Expense</button>
     </form>
-    <ul id="items" class="items">
+    <ul id="expenseList" class="lists">
 
     </ul>
-    <script src="expense.js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js"></script>
+    <script>
+        function expenses(event){
+            event.preventDefault();
+            const amount=event.target.amount.value;
+            const task= event.target.task.value;
+            const cato=event.target.plan.value;
+
+            const obj={
+                amount,
+                task,
+                cato
+            };
+
+            axios.post("https://crudcrud.com/api/edc23e7dfcd64a48a1b83d4c82bc88c4/expenseTracker", obj)
+            .then((res)=>{
+                showExpList(res.data)
+                console.log(res)
+            })
+            .catch((err)=>{
+                document.body.innerHTML= document.body.innerHTML + '<h5>Something went wrong</h5>'
+                console.log(err)
+            })
+            //localStorage.setItem(obj.task, JSON.stringify(obj));
+            //console.log(localStorage);
+            //showExpList(obj);
+        }
+        window.addEventListener("DOMContentLoaded", ()=>{
+            // const loStObj= localStorage;
+            // const loStkey= Object.keys(loStObj);
+            // for(var i =0; i< loStkey.length; i++){
+            //         const key = loStkey[i]
+            //         const userDetailsString = loStObj[key];
+            //         const userDetailsObj = JSON.parse(userDetailsString);
+            //         showExpList(userDetailsObj);
+            //     }
+            axios.get("https://crudcrud.com/api/edc23e7dfcd64a48a1b83d4c82bc88c4/expenseTracker")
+            .then((res)=>{
+                console.log(res)
+                for(var i=0; i<res.data.length; i++){
+                    showExpList(res.data[i]);
+                }
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        })
+
+        function showExpList(exp){
+            document.getElementById('amount').value='';
+            document.getElementById('task').value='';
+            document.getElementById('plan').value='';
+
+            const parentNode=document.getElementById('expenseList');
+            const childHTML=`<li id=${exp._id}> ${exp.amount} - ${exp.task} -${exp.cato}
+                            <button onclick=deletebtn('${exp._id}')> DELETE</button>
+                            <button onclick=editbtn('${exp.amount}','${exp.task}','${exp.cato}','${exp._id}')> EDIT</button>
+                            </li>`
+            parentNode.innerHTML += childHTML;
+        }
+
+        function editbtn(Namount, Ntask, Ncato, expId){
+            document.getElementById('amount').value = Namount;
+            document.getElementById('task').value = Ntask;
+            document.getElementById('plan').value = Ncato;
+
+            deletebtn(expId);
+        }
+
+        function deletebtn(expId){
+
+            axios.delete(`https://crudcrud.com/api/edc23e7dfcd64a48a1b83d4c82bc88c4/expenseTracker/${expId}`)
+            .then((res)=>{
+                removeExp(expId)
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+            //console.log(Ntask);
+            //localStorage.removeItem(Ntask);
+            //removeExp( Ntask)
+        }
+        function removeExp(expId){
+            const parentNode=document.getElementById('expenseList');
+            const deleteChildHTML= document.getElementById(expId);
+            if(deleteChildHTML)
+                parentNode.removeChild(deleteChildHTML);
+        }
+
     </script>
 </body>
 </html>
