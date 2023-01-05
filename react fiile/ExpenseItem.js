@@ -1,10 +1,19 @@
-function ExpenseItem(){
+import './Expense.css';
+function ExpenseItem(props){
+    const expDate= new Date(2023,3,2);
+    const expTitle='Car insurense';
+    const expAmount=20500;
     return ( 
-        <div>
-            <div>Expense Items</div>
-            <div>Food Rs 10</div>
-            <div>Petrol Rs 100</div>
-            <div>Movies Rs 200</div>
+        <div className='expense-item'>
+            <div>
+                <div>Month</div>
+                <div>Year</div>
+                <div>Day</div>
+            </div>
+            <div className='expense-item__descrption'>
+                <h3>{expTitle}</h3>
+                <div className='expense-item__price'>Rs {expAmount}</div>
+            </div>
         </div>
     );
 }
