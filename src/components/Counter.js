@@ -4,7 +4,7 @@ import {
  useSelector, 
   //connect 
 } from 'react-redux';
-import { counterAction } from '../store/index'
+import { counterAction } from '../store/counter-slice'
 //import { Component } from 'react';
 
 const Counter = () => {
